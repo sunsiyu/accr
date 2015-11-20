@@ -1,0 +1,15 @@
+Package: accr
+Title: utilities of signal processing
+Version: 0.0.0.9000
+Authors@R: person("Siyu", "Sun", email = "sunsiyu.tud@gmail.com", role = c("aut", "cre"))
+Description: Collection of utilities of signal processing, primary based on C++
+Depends: R (>= 3.2.2)
+License: What license is it under?
+LazyData: true
+LinkingTo:
+  Rcpp,
+  actbase
+Imports:
+  Rcpp,
+  actbase
+SystemRequirements: C++11
