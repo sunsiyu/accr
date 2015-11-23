@@ -6,8 +6,6 @@
 #include <climits>
 #include <cmath>
 
-using namespace std;
-
 #define CHUNKSIZE 1000000
 #define GRAVITY 336.0
 #define SAMPLESIZE 100

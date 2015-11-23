@@ -1,15 +1,18 @@
 Package: accr
-Title: utilities of signal processing
+Title: utilities of larger-than-memory signal processing
 Version: 0.0.0.9000
 Authors@R: person("Siyu", "Sun", email = "sunsiyu.tud@gmail.com", role = c("aut", "cre"))
-Description: Collection of utilities of signal processing, primary based on C++
-Depends: R (>= 3.2.2)
+Description: Collection of utilities of signal processing, primary based on C++,
+  focused on large signal, i.e. not fits in available RAM
 License: What license is it under?
-LazyData: true
-LinkingTo:
-  Rcpp,
+Depends:
+  R (>= 3.2.2),
   actbase
 Imports:
   Rcpp,
   actbase
+LinkingTo:
+  Rcpp,
+  actbase
 SystemRequirements: C++11
+LazyData: true

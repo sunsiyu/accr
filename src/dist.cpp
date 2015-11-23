@@ -17,16 +17,20 @@ using namespace Rcpp;
 //' @return A numeric vector of length one
 //' @export
 // [[Rcpp::export]]
-double dist(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t length) {
+Rcpp::DataFrame dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t length) {
 
   Rcpp::NumericMatrix m1, m2;
 
   uint64_t n = length / CHUNKSIZE + 1;
   int16_t x1[3], x2[3];
-  uint64_t dist1 = 0, dist2 = 0, dist3 = 0;
+  double dist1 = 0.0, dist2 = 0.0, dist3 = 0.0;
+  uint64_t toRead;
   for (uint32_t i = 1; i < n; i += CHUNKSIZE) {
     // either read chunksize or remaining space
-    uint64_t toRead = min(CHUNKSIZE, length - i);
+    if (CHUNKSIZE > (length - i))
+      toRead = length - i;
+    else
+      toRead = CHUNKSIZE;
 
     m1 = actbase::ab_readAt(ptr1, i, toRead);
     m2 = actbase::ab_readAt(ptr2, i, toRead);
@@ -46,16 +50,7 @@ double dist(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t len
   }
   Rcpp::DataFrame out = Rcpp::DataFrame::create(Rcpp::Named("dist1") = dist1,
                                                 Rcpp::Named("dist2") = dist2,
-                                                Rcpp::Named("dist3") = dist3);
+                                                Rcpp::Named("dist3" ) = dist3);
   return(out);
 }
 
-
-// You can include R code blocks in C++ files processed with sourceCpp
-// (useful for testing and development). The R code will be automatically
-// run after the compilation.
-//
-
-/*** R
-timesTwo(42)
-*/

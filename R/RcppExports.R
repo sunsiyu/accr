@@ -11,7 +11,7 @@
 #'
 #' @return A numeric vector of length one
 #' @export
-dist <- function(ptr1, ptr2, index1, index2, length) {
-    .Call('accr_dist', PACKAGE = 'accr', ptr1, ptr2, index1, index2, length)
+dist_cpp <- function(ptr1, ptr2, index1, index2, length) {
+    .Call('accr_dist_cpp', PACKAGE = 'accr', ptr1, ptr2, index1, index2, length)
 }
 
