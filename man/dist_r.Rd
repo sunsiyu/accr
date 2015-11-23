@@ -5,7 +5,7 @@
 \title{Calculate Euclidean distance between two signals}
 \usage{
 dist_r(raw1, raw2, index1 = 1, index2 = 1, length = min(nrow(raw1),
-  nrow(raw2)) - 1)
+  nrow(raw2)) - 1, chunksize = 1e+05)
 }
 \arguments{
 \item{raw1,raw2}{Rawdata objects}
@@ -13,6 +13,8 @@ dist_r(raw1, raw2, index1 = 1, index2 = 1, length = min(nrow(raw1),
 \item{index1,index2}{Starting index for raw1 and raw2}
 
 \item{length}{length to be calculated for both raw1 and raw2}
+
+\item{chunksize}{divide computation to chunks}
 }
 \value{
 a numeric value, euclidean distance

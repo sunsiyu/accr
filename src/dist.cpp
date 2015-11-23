@@ -25,10 +25,10 @@ Rcpp::DataFrame dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2,
   int16_t x1[3], x2[3];
   double dist1 = 0.0, dist2 = 0.0, dist3 = 0.0;
   uint64_t toRead;
-  for (uint32_t i = 1; i < n; i += CHUNKSIZE) {
+  for (uint32_t i = 1; i <= n; i += CHUNKSIZE) {
     // either read chunksize or remaining space
-    if (CHUNKSIZE > (length - i))
-      toRead = length - i;
+    if (CHUNKSIZE > (length - (i-1)*CHUNKSIZE))
+      toRead = length - (i-1)*CHUNKSIZE;
     else
       toRead = CHUNKSIZE;
 
@@ -39,13 +39,13 @@ Rcpp::DataFrame dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2,
       x1[0] = m1(i, 0);
       x1[1] = m1(i, 1);
       x1[2] = m1(i, 2);
-      x2[0] = m1(i, 0);
-      x2[1] = m1(i, 1);
-      x2[2] = m1(i, 2);
+      x2[0] = m2(i, 0);
+      x2[1] = m2(i, 1);
+      x2[2] = m2(i, 2);
 
-      dist1 += (x1[0] - x2[0])*(x1[0] - x2[0]);
-      dist2 += (x1[1] - x2[1])*(x1[1] - x2[1]);
-      dist3 += (x1[2] - x2[2])*(x1[2] - x2[2]);
+      dist1 += sqrt ((x1[0] - x2[0])*(x1[0] - x2[0]));
+      dist2 += sqrt ((x1[1] - x2[1])*(x1[1] - x2[1]));
+      dist3 += sqrt ((x1[2] - x2[2])*(x1[2] - x2[2]));
     }
   }
   Rcpp::DataFrame out = Rcpp::DataFrame::create(Rcpp::Named("dist1") = dist1,
