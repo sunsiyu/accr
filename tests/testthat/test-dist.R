@@ -11,7 +11,7 @@ test_that("dist_r assertions work", {
 
 test_that("dist_r computation works", {
   expect_equal(dist_r(matrix(rep(0,3), ncol=3), matrix(rep(0,3), ncol=3)),
-               matrix(c(0,0,0), ncol=3))
+               c(0,0,0))
   expect_equal(dist_r(matrix(rep(0,3), ncol=3), matrix(rep(1,3), ncol=3)),
-               matrix(c(1,1,1), ncol=3))
+               c(1,1,1))
 })

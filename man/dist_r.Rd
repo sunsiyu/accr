@@ -2,17 +2,17 @@
 % Please edit documentation in R/dist.R
 \name{dist_r}
 \alias{dist_r}
-\title{Calculate Euclidean distance between two signals}
+\title{Calculate Euclidean distance between two large matrices}
 \usage{
-dist_r(raw1, raw2, index1 = 1, index2 = 1, length = min(nrow(raw1),
-  nrow(raw2)) - 1, chunksize = 1e+05)
+dist_r(m1, m2, n1 = 1, n2 = 1, len = max(0, min(nrow(m1) - n1, nrow(m2) -
+  n2)), chn = min(ncol(m1), ncol(m2)), chunksize = 1e+05)
 }
 \arguments{
-\item{raw1,raw2}{Rawdata objects}
+\item{m1,m2}{matrix objects or objects of matrix shape}
 
-\item{index1,index2}{Starting index for raw1 and raw2}
+\item{n1,n2}{Starting index for m1 and m2}
 
-\item{length}{length to be calculated for both raw1 and raw2}
+\item{len}{len to be calculated for both m1 and m2}
 
 \item{chunksize}{divide computation to chunks}
 }
@@ -20,7 +20,7 @@ dist_r(raw1, raw2, index1 = 1, index2 = 1, length = min(nrow(raw1),
 a numeric value, euclidean distance
 }
 \description{
-Calculate Euclidean distance between two signals
+Calculate Euclidean distance between two large matrices
 }
 \examples{
 d <- dist_r(r1, r2, 1, 1, 1000)

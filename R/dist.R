@@ -9,7 +9,7 @@
 #' d <- dist_r(r1, r2, 1, 1, 1000)
 #' @author Siyu Sun
 #' @export
-dist_r <- function(m1, m2, n1=1, n2=1, len=min(0, nrow(m1)-n1, nrow(m2)-n2),
+dist_r <- function(m1, m2, n1=1, n2=1, len=max(0, min(nrow(m1)-n1, nrow(m2)-n2)),
                    chn = min(ncol(m1), ncol(m2)), chunksize = 100000)
 {
   # TODO: in case of absence of m2, should calculate dist within m1
@@ -33,9 +33,9 @@ dist_r <- function(m1, m2, n1=1, n2=1, len=min(0, nrow(m1)-n1, nrow(m2)-n2),
     a1 <- m1[i1:(i1+toRead), 1:chn, drop=F]
     a2 <- m2[i2:(i2+toRead), 1:chn, drop=F]
 
-    d[[i]] <- colSums((a1 - a2)^2)
+    d[[i]] <- (a1 - a2)^2
   }
 
-  res <- sqrt(do.call(rbind, d))
+  res <- sqrt(colSums(do.call(rbind, d)))
   return(res)
 }
