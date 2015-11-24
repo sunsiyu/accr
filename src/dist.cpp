@@ -17,7 +17,7 @@ using namespace Rcpp;
 //' @return A numeric vector of length one
 //' @export
 // [[Rcpp::export]]
-Rcpp::DataFrame dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t length) {
+Rcpp::List dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t length) {
 
   Rcpp::NumericMatrix m1, m2;
 
@@ -36,21 +36,21 @@ Rcpp::DataFrame dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2,
     m2 = actbase::ab_readAt(ptr2, i, toRead);
 
     for (uint64_t j = 0; j < toRead; j++) {
-      x1[0] = m1(i, 0);
-      x1[1] = m1(i, 1);
-      x1[2] = m1(i, 2);
-      x2[0] = m2(i, 0);
-      x2[1] = m2(i, 1);
-      x2[2] = m2(i, 2);
+      x1[0] = m1(j, 0);
+      x1[1] = m1(j, 1);
+      x1[2] = m1(j, 2);
+      x2[0] = m2(j, 0);
+      x2[1] = m2(j, 1);
+      x2[2] = m2(j, 2);
 
-      dist1 += sqrt ((x1[0] - x2[0])*(x1[0] - x2[0]));
-      dist2 += sqrt ((x1[1] - x2[1])*(x1[1] - x2[1]));
-      dist3 += sqrt ((x1[2] - x2[2])*(x1[2] - x2[2]));
+      dist1 +=  (x1[0] - x2[0])*(x1[0] - x2[0]);
+      dist2 +=  (x1[1] - x2[1])*(x1[1] - x2[1]);
+      dist3 +=  (x1[2] - x2[2])*(x1[2] - x2[2]);
     }
   }
-  Rcpp::DataFrame out = Rcpp::DataFrame::create(Rcpp::Named("dist1") = dist1,
-                                                Rcpp::Named("dist2") = dist2,
-                                                Rcpp::Named("dist3" ) = dist3);
+  Rcpp::List out = Rcpp::List::create(_["x"] = sqrt (dist1),
+                                      _["y"] = sqrt (dist2),
+                                      _["z"] = sqrt (dist3));
   return(out);
 }
 

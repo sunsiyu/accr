@@ -1,41 +1,41 @@
-#' Calculate Euclidean distance between two signals
+#' Calculate Euclidean distance between two large matrices
 #'
-#' @param raw1,raw2 Rawdata objects
-#' @param index1,index2 Starting index for raw1 and raw2
-#' @param length length to be calculated for both raw1 and raw2
+#' @param m1,m2 matrix objects or objects of matrix shape
+#' @param n1,n2 Starting index for m1 and m2
+#' @param len len to be calculated for both m1 and m2
 #' @param chunksize divide computation to chunks
 #' @return a numeric value, euclidean distance
 #' @examples
 #' d <- dist_r(r1, r2, 1, 1, 1000)
 #' @author Siyu Sun
 #' @export
-dist_r <- function(raw1, raw2, index1=1, index2=1,
-                   length=min(nrow(raw1), nrow(raw2))-1,
-                   chunksize = 100000)
+dist_r <- function(m1, m2, n1=1, n2=1, len=min(0, nrow(m1)-n1, nrow(m2)-n2),
+                   chn = min(ncol(m1), ncol(m2)), chunksize = 100000)
 {
-  stopifnot(inherits(raw1, "Rawdata"))
-  stopifnot(inherits(raw2, "Rawdata"))
-  if (index1 < 1 || index2 < 1 || index1 > nrow(raw1) || index2 > nrow(raw2) ||
-      length > nrow(raw1)-index1+1 || length > nrow(raw2)-index2+1 || length < 1)
-    stop("Range error: index1, index2 and/or length out of range")
+  # TODO: in case of absence of m2, should calculate dist within m1
+  stopifnot(inherits(m1[1:nrow(m1), ], "matrix") || inherits(m1, "matrix") && is.numeric(m1))
+  stopifnot(inherits(m2[1:nrow(m2), ], "matrix") || inherits(m2, "matrix") && is.numeric(m2))
+  if (n1 < 1 || n2 < 1 || n1 > nrow(m1) || n2 > nrow(m2) ||
+      len > nrow(m1)-n1+1 || len > nrow(m2)-n2+1 || len < 0)
+    stop("Range error: n1, n2 and/or len out of range")
 
-  nchunk <- length / chunksize + 1
+  chn <- ifelse(is.null(chn), 1, chn)
+  nchunk <- max(1, ceiling(len / chunksize))
+  d <- vector("list", nchunk)
 
-  d <- vector("list", 3)
   for (i in 1:nchunk) {
     # determine size to read
-    toRead <- min(chunksize, length - (i-1)*chunksize)
-    i1 <- index1 + (i-1)*chunksize
-    i2 <- index2 + (i-1)*chunksize
+    toRead <- min(chunksize, len - (i-1)*chunksize)
+    i1 <- n1 + (i-1)*chunksize
+    i2 <- n2 + (i-1)*chunksize
 
-    # in this case, 3 signals to compare
-    for (j in 1:3) {
-      a1 <- raw1[i1:(i1+toRead), j]
-      a2 <- raw2[i2:(i2+toRead), j]
-      m <- matrix(c(a1, a2), nrow = 2, byrow = T)
-      d[[j]] <- c(d[[j]], as.numeric(stats::dist(m, method="euclidean")))
-    }
+    # need to add drop=F!
+    a1 <- m1[i1:(i1+toRead), 1:chn, drop=F]
+    a2 <- m2[i2:(i2+toRead), 1:chn, drop=F]
+
+    d[[i]] <- colSums((a1 - a2)^2)
   }
 
-  return(lapply(d, sum))
+  res <- sqrt(do.call(rbind, d))
+  return(res)
 }

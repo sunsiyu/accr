@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // dist_cpp
-Rcpp::DataFrame dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t length);
+Rcpp::List dist_cpp(SEXP ptr1, SEXP ptr2, uint64_t index1, uint64_t index2, uint64_t length);
 RcppExport SEXP accr_dist_cpp(SEXP ptr1SEXP, SEXP ptr2SEXP, SEXP index1SEXP, SEXP index2SEXP, SEXP lengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;

@@ -5,14 +5,15 @@ Authors@R: person("Siyu", "Sun", email = "sunsiyu.tud@gmail.com", role = c("aut"
 Description: Collection of utilities of signal processing, primary based on C++,
   focused on large signal, i.e. not fits in available RAM
 License: What license is it under?
-Depends:
+Depends: 
   R (>= 3.2.2),
   actbase
-Imports:
+Imports: 
   Rcpp,
   actbase
-LinkingTo:
+LinkingTo: 
   Rcpp,
   actbase
 SystemRequirements: C++11
 LazyData: true
+Suggests: testthat
