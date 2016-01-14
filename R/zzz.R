@@ -1,6 +1,5 @@
 #' @useDynLib accr
 #' @importFrom Rcpp sourceCpp
-#' @import actbase
 NULL
 
 .onUnload <- function (libpath){
